@@ -1,6 +1,7 @@
 import { Client, LocalAuth } from "whatsapp-web.js";
 import qrcode from "qrcode";
 import { sendEmail } from "../utils/emails/gmail";
+import "dotenv/config";
 
 const client = new Client({
   authStrategy: new LocalAuth(),

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import client from "../services/whatsappClient";
+import "dotenv/config";
 
 export const sendMessage = async (
   req: Request,
