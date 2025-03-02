@@ -3,7 +3,8 @@ import "dotenv/config";
 
 export const sendEmail = async (
   subject: string,
-  html: string
+  html: string,
+  attachments: any[] = []
 ): Promise<void> => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -18,6 +19,7 @@ export const sendEmail = async (
     to: process.env.RECEIVER_EMAIL,
     subject,
     html,
+    attachments,
   };
 
   await transporter.sendMail(mailOptions);

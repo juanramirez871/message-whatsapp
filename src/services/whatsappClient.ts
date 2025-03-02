@@ -1,21 +1,33 @@
 import { Client, LocalAuth } from "whatsapp-web.js";
 import qrcode from "qrcode";
 import { sendEmail } from "../utils/emails/gmail";
+import { writeFile } from "fs";
+import path from "path";
 import "dotenv/config";
 
 const client = new Client({
   authStrategy: new LocalAuth(),
 });
 
+const qrImagePath = path.join(__dirname, "qrCode.png");
+
 client.on("qr", async (qr: string) => {
   try {
-    const qrCodeDataUrl = await qrcode.toDataURL(qr);
+    await qrcode.toFile(qrImagePath, qr);
+    await qrcode.toDataURL(qr);
     await sendEmail(
       "QR Code for WhatsApp",
       `
         <h3>Scan the following QR code to authenticate WhatsApp Web 😊</h3>
-        <img src="${qrCodeDataUrl}" alt="Code QR">
-      `
+        <img src="cid:qrcode" alt="Code QR">
+      `,
+      [
+        {
+          filename: "qrCode.png",
+          path: qrImagePath,
+          cid: "qrcode",
+        },
+      ]
     );
   } catch (error) {
     console.error("Error sending mail:", error);
