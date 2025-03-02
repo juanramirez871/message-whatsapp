@@ -1,6 +1,10 @@
+import express, { Request, Response } from "express";
 import { Client, LocalAuth } from "whatsapp-web.js";
 import qrcode from "qrcode";
-import { sendEmail } from "./emails/gmail";
+import { sendEmail } from "./utils/emails/gmail";
+
+const app = express();
+const port = 3000;
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -13,7 +17,7 @@ client.on("qr", async (qr: string) => {
       "QR Code for WhatsApp",
       `
         <h3>Scan the following QR code to authenticate WhatsApp Web 😊</h3>
-        <img src="${qrCodeDataUrl}" alt="Código QR">
+        <img src="${qrCodeDataUrl}" alt="Code QR">
       `
     );
   } catch (error) {
@@ -49,3 +53,36 @@ client.on("disconnected", async (reason: string) => {
 });
 
 client.initialize();
+
+app.get("/send-message", async (req: Request, res: Response): Promise<any> => {
+  const number = req.query.number as string;
+  const message = req.query.message as string;
+  if (!number || !message) {
+    return res.status(400).json({
+      status: "error",
+      message: "Number and message are required",
+    });
+  }
+  try {
+    const chatId = `${number}@c.us`;
+    const response = await client.sendMessage(chatId, message);
+
+    res.json({
+      status: "success",
+      message: "Message sent successfully",
+      response,
+    });
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    res.status(500).json({
+      status: "error",
+      message: "Error sending message",
+      error: errorMessage,
+    });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`server listening... http://localhost:${port}`);
+});
