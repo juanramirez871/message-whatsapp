@@ -51,11 +51,10 @@ client.on("auth_failure", async (msg: string) => {
   );
 });
 
-client.on("disconnected", async (reason: string) => {
+client.on("disconnected", async () => {
   await sendEmail(
     "Disconnected from whatsApp client",
     `
-    <p>Reason: ${reason}</p>
     <img src="https://external-preview.redd.it/NIycFW-95BU8LyFDE80dY4zq2nq5OPxsupj_J_-fdXw.jpg?auto=webp&s=f6c1c60321a8e46e0a9267813385c4b2164e2a24">
     `
   );
