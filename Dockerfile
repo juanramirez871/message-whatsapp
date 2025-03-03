@@ -1,6 +1,5 @@
 FROM node:18 AS build
 
-# Instalar dependencias necesarias para Puppeteer y Chromium
 RUN apt-get update && apt-get install -y \
     chromium \
     libnss3 \
@@ -38,11 +37,8 @@ WORKDIR /app
 
 COPY --from=build /app /app
 
-# Instalar Chromium en la segunda etapa
 RUN apt-get update && apt-get install -y chromium
 
-# Exponer el puerto
 EXPOSE 3001
 
-# Definir el comando por defecto
 CMD ["npm", "start"]
