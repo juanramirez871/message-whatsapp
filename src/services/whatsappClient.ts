@@ -6,6 +6,10 @@ import "dotenv/config";
 
 const client = new Client({
   authStrategy: new LocalAuth(),
+  puppeteer: {
+    executablePath: "/usr/bin/chromium",
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  },
 });
 
 const qrImagePath: string = path.join(__dirname, "qrCode.png");
