@@ -1,6 +1,6 @@
-FROM node:18 AS build
+FROM node:18-slim AS build
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     chromium \
     libnss3 \
     libatk1.0-0 \
@@ -19,19 +19,19 @@ RUN apt-get update && apt-get install -y \
     fonts-liberation \
     libappindicator1 \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --only=production
 
 COPY . .
 
 RUN npm run build
 
-FROM node:18
+FROM node:18-slim
 
 WORKDIR /app
 
