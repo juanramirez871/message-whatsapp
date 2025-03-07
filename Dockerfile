@@ -37,8 +37,6 @@ WORKDIR /app
 
 COPY --from=build /app /app
 
-RUN apt-get update && apt-get install -y chromium
-
 EXPOSE 3001
 
 CMD ["npm", "start"]
