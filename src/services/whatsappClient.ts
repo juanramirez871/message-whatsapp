@@ -62,6 +62,7 @@ client.on("disconnected", async () => {
     <img src="${baseUrl}/img/1.jpg">
     `
   );
+  client.initialize();
 });
 
 client.initialize();
