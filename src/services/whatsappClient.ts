@@ -10,6 +10,7 @@ const client = new Client({
     executablePath: "/snap/bin/chromium",
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     headless: true,
+    timeout: 120000,
   },
 });
 
